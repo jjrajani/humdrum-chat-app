@@ -28,8 +28,8 @@ export default class RoomOne extends Component {
   submitForm = e => {
     e.preventDefault();
 
-    // var socket = io("https://humdrum-chat-app.herokuapp.com/");
-    var socket = io("http://localhost:5000");
+    var socket = io("https://humdrum-chat-app.herokuapp.com/");
+    // var socket = io("http://localhost:5000");
 
     socket.emit("chat message", {
       msg: this.state.message,
@@ -42,7 +42,7 @@ export default class RoomOne extends Component {
   };
   render() {
     return (
-      <div>
+      <div className="room">
         RoomOne
         <ul id="messages">
           {this.state.messages.map((m, i) => (
