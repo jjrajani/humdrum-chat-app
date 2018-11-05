@@ -13,9 +13,14 @@ io.on("connection", function(socket) {
     console.log("user disconnected");
   });
 
+  socket.on("room", function(room) {
+    // if (socket.room) socket.leave(socket.room);
+
+    socket.join(room);
+  });
+
   socket.on("chat message", function(msg) {
-    console.log("message: " + msg);
-    io.emit("chat message", msg);
+    io.sockets.in(msg.room).emit("chat message", msg.msg);
   });
 });
 
