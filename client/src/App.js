@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import Chat from "./chat/Chat";
 
 class App extends Component {
   // Initialize state
@@ -50,6 +51,7 @@ class App extends Component {
             </button>
           </div>
         )}
+        <Chat />
       </div>
     );
   }

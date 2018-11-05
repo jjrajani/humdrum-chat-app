@@ -4,6 +4,21 @@ const generatePassword = require("password-generator");
 
 const app = express();
 
+var http = require("http").Server(app);
+var io = require("socket.io")(http);
+
+io.on("connection", function(socket) {
+  console.log("a user connected");
+  socket.on("disconnect", function() {
+    console.log("user disconnected");
+  });
+
+  socket.on("chat message", function(msg) {
+    console.log("message: " + msg);
+    io.emit("chat message", msg);
+  });
+});
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/build")));
 
@@ -29,6 +44,7 @@ app.get("*", (req, res) => {
 });
 
 const port = process.env.PORT || 5000;
-app.listen(port);
-
-console.log(`Password generator listening on ${port}`);
+// app.listen(port);
+http.listen(port, function() {
+  console.log(`Password generator listening on ${port}`);
+});
