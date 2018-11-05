@@ -20,7 +20,7 @@ export default class Chat extends Component {
   submitForm = e => {
     e.preventDefault();
 
-    var socket = io("http://localhost:5000");
+    var socket = io("https://humdrum-chat-app.herokuapp.com/");
 
     socket.emit("chat message", this.state.message);
     this.setState({ message: "" });
