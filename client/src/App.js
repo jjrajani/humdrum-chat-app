@@ -87,18 +87,40 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="app-wrapper">
         <p>
           To invoke video call, open this page in a second tab or browser then
-          press connect
+          press connect.
         </p>
         <button onClick={this.showPeerVideo}>Connect</button>
-        <video ref={c => (this.yourVideo = c)} autoPlay />
-        {this.state.streams.map(stream => {
-          return (
-            <video key={stream.id} ref={c => (this[stream.id] = c)} autoPlay />
-          );
-        })}
+        <div className="video-wrapper">
+          <video ref={c => (this.yourVideo = c)} autoPlay />
+          {this.state.streams.map(stream => {
+            return (
+              <video
+                key={stream.id}
+                ref={c => (this[stream.id] = c)}
+                autoPlay
+              />
+            );
+          })}
+        </div>
+        <div className="footer">
+          <a
+            href="https://github.com/jjrajani"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            github
+          </a>
+          <a
+            href="https://jjrajani.github.io"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            portfolio
+          </a>
+        </div>
       </div>
     );
   }
