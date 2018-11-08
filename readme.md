@@ -19,6 +19,6 @@ You should now be able to open [http://localhost:5000](http://localhost:5000).
 
 #### Video Call
 
-To invoke a video call, open [this app](http://localhost:5000) in two tabs or browsers then hit connect.
+To invoke a video call, open [this app](https://humdrum-chat-app.herokuapp.com/) in two tabs or browsers then hit connect.
 
 [Live Site](https://humdrum-chat-app.herokuapp.com/)
