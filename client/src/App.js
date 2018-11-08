@@ -1,20 +1,8 @@
 import React, { Component } from "react";
-import io from "socket.io-client";
 import "./App.css";
 
 import firebase from "./db/firebase";
-var servers = {
-  iceServers: [
-    { urls: "stun:stun.services.mozilla.com" },
-    { urls: "stun:stun.l.google.com:19302" },
-    {
-      urls: "turn:numb.viagenie.ca",
-      credential: "webrtc",
-      username: "websitebeaver@mail.com"
-    }
-  ]
-};
-var pc = new RTCPeerConnection(servers);
+import pc from "./util/peer_connection";
 
 var database = firebase.database().ref();
 
@@ -23,7 +11,28 @@ class App extends Component {
     room: "room_one",
     streams: []
   };
-  showMyFace = () => {
+
+  componentDidMount = () => {
+    var me = this;
+
+    // Video Stream
+    me.showMyVideo();
+    pc.onicecandidate = event => {
+      event.candidate
+        ? me.sendStream(
+            me.props.userId,
+            JSON.stringify({ ice: event.candidate })
+          )
+        : console.log("Sent All Ice");
+    };
+    pc.onaddstream = event => {
+      me.setState({ streams: [...this.state.streams, event.stream] });
+    };
+    // Database Listener
+    database.on("child_added", me.readMessage);
+  };
+
+  showMyVideo = () => {
     var me = this;
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: true })
@@ -31,19 +40,19 @@ class App extends Component {
       .then(stream => pc.addStream(stream));
   };
 
-  showFriendsFace = () => {
+  showPeerVideo = () => {
     var me = this;
     pc.createOffer()
       .then(offer => pc.setLocalDescription(offer))
       .then(() =>
-        me.sendMessage(
+        me.sendStream(
           me.props.userId,
           JSON.stringify({ sdp: pc.localDescription })
         )
       );
   };
 
-  sendMessage(senderId, data) {
+  sendStream(senderId, data) {
     var msg = database.push({ sender: senderId, message: data });
     msg.remove();
   }
@@ -60,7 +69,7 @@ class App extends Component {
           .then(() => pc.createAnswer())
           .then(answer => pc.setLocalDescription(answer))
           .then(() =>
-            me.sendMessage(
+            me.sendStream(
               me.props.userId,
               JSON.stringify({ sdp: pc.localDescription })
             )
@@ -68,33 +77,6 @@ class App extends Component {
       else if (msg.sdp.type === "answer")
         pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
     }
-  };
-
-  componentDidMount = () => {
-    var me = this;
-
-    var socket = io();
-
-    socket.on("connect", function() {
-      socket.emit("room", me.state.room);
-    });
-
-    // Video Stream Stuff
-    me.showMyFace();
-    pc.onicecandidate = event => {
-      event.candidate
-        ? me.sendMessage(
-            me.props.userId,
-            JSON.stringify({ ice: event.candidate })
-          )
-        : console.log("Sent All Ice");
-    };
-    pc.onaddstream = event => {
-      me.setState({ streams: [...this.state.streams, event.stream] });
-      me.friendsVideo.srcObject = event.stream;
-    };
-    // Database Listener
-    database.on("child_added", me.readMessage);
   };
 
   componentDidUpdate = () => {
@@ -106,16 +88,17 @@ class App extends Component {
   render() {
     return (
       <div>
-        <p>video</p>
+        <p>
+          To invoke video call, open this page in a second tab or browser then
+          press connect
+        </p>
+        <button onClick={this.showPeerVideo}>Connect</button>
         <video ref={c => (this.yourVideo = c)} autoPlay />
-        <video ref={c => (this.friendsVideo = c)} autoPlay />
         {this.state.streams.map(stream => {
           return (
             <video key={stream.id} ref={c => (this[stream.id] = c)} autoPlay />
           );
         })}
-        <div id="videos" />
-        <button onClick={this.showFriendsFace}>Call</button>
       </div>
     );
   }
