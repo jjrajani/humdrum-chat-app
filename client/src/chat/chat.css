@@ -1,5 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+
+.chats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
 .room {
   border: solid red 1px;
+  width: 48.5vw;
+  height: 20vh;
+}
+
+.room:nth-child(odd) {
+  margin: 1vw 0.5vw 1vw 1vw;
+}
+
+.room:nth-child(even) {
+  margin: 1vw 1vw 1vw 0.5vw;
 }
 
 /* * {

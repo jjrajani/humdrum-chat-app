@@ -9,18 +9,28 @@ var io = require("socket.io")(http);
 
 io.on("connection", function(socket) {
   console.log("a user connected");
+
+  // app initializes with unique id
+  // listens for users to create room
+
   socket.on("disconnect", function() {
     console.log("user disconnected");
   });
 
-  socket.on("room", function(room) {
-    // if (socket.room) socket.leave(socket.room);
+  socket.on("room", function(room, userId) {
+    if (socket.room) socket.leave(socket.room);
 
     socket.join(room);
+    io.sockets.in(room).emit("user connected", userId);
   });
 
   socket.on("chat message", function(msg) {
     io.sockets.in(msg.room).emit("chat message", msg.msg);
+  });
+
+  socket.on("video", function(video) {
+    console.log("video", video);
+    io.sockets.in(msg.room).emit("video", video);
   });
 });
 

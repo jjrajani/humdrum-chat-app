@@ -28,8 +28,8 @@ export default class RoomTwo extends Component {
   submitForm = e => {
     e.preventDefault();
 
-    var socket = io("https://humdrum-chat-app.herokuapp.com/");
-    // var socket = io("http://localhost:5000");
+    // var socket = io("https://humdrum-chat-app.herokuapp.com/");
+    var socket = io("http://localhost:5000");
 
     socket.emit("chat message", {
       msg: this.state.message,
