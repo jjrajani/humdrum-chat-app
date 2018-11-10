@@ -49,6 +49,7 @@ button:active {
 }
 
 .video-wrapper {
+  border: solid red 1px;
   width: 95vw;
   margin: 10px auto 20px;
   display: flex;
@@ -58,6 +59,7 @@ button:active {
 
 video {
   width: 49% !important;
+  border: solid blue 1px;
 }
 
 a {

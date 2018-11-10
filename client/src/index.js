@@ -1,7 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
+// import App from "./App";
+// import AppTwo from "./AppTwo";
+// import AppThree from "./AppThree";
+// import AppFour from "./AppFour";
+// import AppFive from "./AppFive";
+import AppSix from "./AppSix";
 // import * as serviceWorker from "./serviceWorker";
 
 function getRandomInt(max) {
@@ -9,7 +14,7 @@ function getRandomInt(max) {
 }
 
 ReactDOM.render(
-  <App userId={getRandomInt(9999999999999999)} />,
+  <AppSix userId={getRandomInt(9999999999999999)} />,
   document.getElementById("root")
 );
 

@@ -1,3 +1,4 @@
+import PeerConnection from "rtcpeerconnection";
 var servers = {
   iceServers: [
     { urls: "stun:stun.services.mozilla.com" },
@@ -9,6 +10,7 @@ var servers = {
     }
   ]
 };
-var pc = new RTCPeerConnection(servers);
+
+var pc = new PeerConnection(servers);
 
 export default pc;
