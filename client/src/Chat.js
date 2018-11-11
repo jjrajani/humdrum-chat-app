@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import "./Chat.css";
+import "./Chat.scss";
 import RemotePlayer from "./RemotePlayer";
 
 /* CONFIG */
@@ -18,10 +18,14 @@ export default class Chat extends Component {
   state = {
     audio: false,
     video: true,
-    socket: null /* our socket.io connection to our webserver */,
+    socket: io(
+      SIGNALING_SERVER
+    ) /* our socket.io connection to our webserver */,
     localMediaStream: null /* our own microphone / webcam */,
     peers: {} /* keep track of our peer connections, indexed by peer_id (aka socket.io id) */,
     peerMediaElements: {} /* keep track of our <video>/<audio> tags, indexed by peer_id */,
+
+    showControls: true,
 
     peerDevices: {}
   };
@@ -65,10 +69,16 @@ export default class Chat extends Component {
   join_chat_channel = ({ socket, channel, userdata }) => {
     socket.emit("join", { channel, userdata });
   };
-
+  fadeOutControls = () => {
+    let me = this;
+    setTimeout(() => {
+      me.setState({ showControls: false });
+    }, 2500);
+  };
   componentDidMount = () => {
     let socket = io(SIGNALING_SERVER);
     let me = this;
+    this.fadeOutControls();
     socket.on("connect", function() {
       // console.log("Connected to signaling server", me.state);
       me.setupLocalMedia(function() {
@@ -285,32 +295,54 @@ export default class Chat extends Component {
     });
   };
 
+  onControlsHover = isHovered => {
+    // console.log("isHovered", e);
+    this.setState({ showControls: isHovered });
+  };
+
   render() {
-    console.log("RENDER", this);
-    if (this.localPlayer && this.localPlayer.srcObject) {
-      let tracks = this.localPlayer.srcObject.getTracks();
-      console.log("tracks", tracks);
-    }
+    // if (this.localPlayer && this.localPlayer.srcObject) {
+    //   let tracks = this.localPlayer.srcObject.getTracks();
+    //   console.log("tracks", tracks);
+    // }
     return (
       <div className="chat">
-        <div className="local media-wrapper">
-          <video autoPlay ref={c => (this.localPlayer = c)} />
-          <button onClick={this.toggleMediaOptions.bind(this, "audio")}>
-            {this.state.audio === true ? "Mute Audio" : "Unmute Audio"}
-          </button>
-          <button onClick={this.toggleMediaOptions.bind(this, "video")}>
-            {this.state.video === true ? "Mute Video" : "Unmute Video"}
-          </button>
+        <div
+          className={
+            this.state.showControls
+              ? "local media-wrapper hovered"
+              : "local media-wrapper"
+          }
+        >
+          <div className="video-wrapper">
+            <video autoPlay ref={c => (this.localPlayer = c)} />
+            <div className="controls">
+              <h4>{this.state.socket.id}</h4>
+              <div>
+                <button
+                  className={this.state.audio ? "active" : ""}
+                  onClick={this.toggleMediaOptions.bind(this, "audio")}
+                >
+                  {this.state.audio === true ? "Mute Audio" : "Unmute Audio"}
+                </button>
+                <button
+                  className={this.state.video ? "active" : ""}
+                  onClick={this.toggleMediaOptions.bind(this, "video")}
+                >
+                  {this.state.video === true ? "Mute Video" : "Unmute Video"}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        Remote Video
         {Object.keys(this.state.peerDevices).length > 0 &&
-          Object.keys(this.state.peerDevices).map((d, i) => {
-            console.log(
-              "this.state.peerDevices[d]",
-              this.state.peerDevices[d].stream.getTracks()
-            );
+          Object.keys(this.state.peerDevices).map(d => {
             return (
-              <RemotePlayer key={i} srcObj={this.state.peerDevices[d].stream} />
+              <RemotePlayer
+                key={d}
+                peerId={d}
+                srcObj={this.state.peerDevices[d].stream}
+              />
             );
           })}
       </div>
