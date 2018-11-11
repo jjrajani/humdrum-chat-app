@@ -4,7 +4,8 @@ import "./Chat.css";
 import RemotePlayer from "./RemotePlayer";
 
 /* CONFIG */
-var SIGNALING_SERVER = "http://localhost:5001";
+// var SIGNALING_SERVER = "http://localhost:5001";
+var SIGNALING_SERVER = "https://humdrum-chat-app.herokuapp.com/";
 var USE_AUDIO = true;
 var USE_VIDEO = true;
 var DEFAULT_CHANNEL = "some-global-channel-name";
