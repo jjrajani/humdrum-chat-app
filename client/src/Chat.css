@@ -3,6 +3,9 @@
   width: 48%;
 }
 
+.local.video-wrapper {
+}
+
 .media-wrapper:nth-child(even) {
   margin: 2% 1.25% 0px 0.75%;
 }

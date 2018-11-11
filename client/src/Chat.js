@@ -292,7 +292,7 @@ export default class Chat extends Component {
       console.log("tracks", tracks);
     }
     return (
-      <div>
+      <div className="chat">
         <div className="local media-wrapper">
           <video autoPlay ref={c => (this.localPlayer = c)} />
           <button onClick={this.toggleMediaOptions.bind(this, "audio")}>
