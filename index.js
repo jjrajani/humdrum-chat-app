@@ -56,6 +56,7 @@ io.sockets.on("connection", function(socket) {
     channels[channel][socket.id] = socket;
     socket.channels[channel] = channel;
   });
+
   // app initializes with unique id
   // listens for users to create room
   // socket.on("disconnect", function() {

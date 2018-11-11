@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
+import "./Chat.css";
 import RemotePlayer from "./RemotePlayer";
 
 /* CONFIG */
 var SIGNALING_SERVER = "http://localhost:5001";
-var USE_AUDIO = false;
+var USE_AUDIO = true;
 var USE_VIDEO = true;
 var DEFAULT_CHANNEL = "some-global-channel-name";
 var MUTE_AUDIO_BY_DEFAULT = false;
@@ -14,6 +15,8 @@ var ICE_SERVERS = [{ url: "stun:stun.l.google.com:19302" }];
 
 export default class Chat extends Component {
   state = {
+    audio: false,
+    video: true,
     socket: null /* our socket.io connection to our webserver */,
     localMediaStream: null /* our own microphone / webcam */,
     peers: {} /* keep track of our peer connections, indexed by peer_id (aka socket.io id) */,
@@ -42,8 +45,17 @@ export default class Chat extends Component {
     navigator.mediaDevices
       .getUserMedia({ audio: USE_AUDIO, video: USE_VIDEO })
       .then(stream => {
+        let tracks = stream.getTracks();
+        tracks.forEach(track => {
+          if (track.kind === "audio") {
+            track.enabled = me.state.audio;
+          } else if (track.kind === "video") {
+            track.enabled = me.state.video;
+          }
+        });
         /* user accepted access to a/v */
         me.localPlayer.srcObject = stream;
+        window.localPlayer = me.localPlayer;
         me.setState({ localMediaStream: stream });
         if (cb) cb();
       });
@@ -65,6 +77,8 @@ export default class Chat extends Component {
           socket,
           channel: DEFAULT_CHANNEL,
           userdata: {
+            audio: me.state.audio,
+            video: me.state.video,
             "whatever-you-want-here": "stuff"
           }
         });
@@ -93,7 +107,14 @@ export default class Chat extends Component {
                                                                             * for now to get firefox to talk to chrome */
       );
       me.setState({
-        peers: { ...me.state.peers, [peer_id]: peer_connection }
+        peers: {
+          ...me.state.peers,
+          [peer_id]: {
+            peer_connection,
+            audio: config.audio,
+            video: config.video
+          }
+        }
       });
 
       peer_connection.onicecandidate = function(event) {
@@ -157,7 +178,7 @@ export default class Chat extends Component {
     socket.on("sessionDescription", function(config) {
       // console.log("Remote description received: ", config);
       var peer_id = config.peer_id;
-      var peer = me.state.peers[peer_id];
+      var peer = me.state.peers[peer_id].peer_connection;
       var remote_description = config.session_description;
       // console.log(config.session_description);
 
@@ -206,7 +227,7 @@ export default class Chat extends Component {
      * can begin trying to find the best path to one another on the net.
      */
     socket.on("iceCandidate", function(config) {
-      var peer = me.state.peers[config.peer_id];
+      var peer = me.state.peers[config.peer_id].peer_connection;
       var ice_candidate = config.ice_candidate;
       if (peer) {
         peer.addIceCandidate(new RTCIceCandidate(ice_candidate));
@@ -247,25 +268,46 @@ export default class Chat extends Component {
     });
     /// END DID MOUNT
   };
+
+  toggleMediaOptions = mediaOpt => {
+    let track =
+      this.localPlayer.srcObject.getTracks().filter(t => {
+        return t.kind === mediaOpt;
+      })[0] || false;
+    if (!track) {
+      return;
+    }
+    track.enabled = !this.state[mediaOpt];
+
+    this.setState({
+      [mediaOpt]: !this.state[mediaOpt]
+    });
+  };
+
   render() {
-    // console.log("RENDER", this);
+    console.log("RENDER", this);
+    if (this.localPlayer && this.localPlayer.srcObject) {
+      let tracks = this.localPlayer.srcObject.getTracks();
+      console.log("tracks", tracks);
+    }
     return (
       <div>
-        App Six
-        {USE_VIDEO ? (
-          <div className="video-wrapper">
-            <p>video</p>
-            <video autoPlay ref={c => (this.localPlayer = c)} />
-          </div>
-        ) : (
-          <div>
-            <p>audio</p>
-            <audio autoPlay muted ref={c => (this.localPlayer = c)} />
-          </div>
-        )}
+        <div className="local media-wrapper">
+          <video autoPlay ref={c => (this.localPlayer = c)} />
+          <button onClick={this.toggleMediaOptions.bind(this, "audio")}>
+            {this.state.audio === true ? "Mute Audio" : "Unmute Audio"}
+          </button>
+          <button onClick={this.toggleMediaOptions.bind(this, "video")}>
+            {this.state.video === true ? "Mute Video" : "Unmute Video"}
+          </button>
+        </div>
         Remote Video
         {Object.keys(this.state.peerDevices).length > 0 &&
           Object.keys(this.state.peerDevices).map((d, i) => {
+            console.log(
+              "this.state.peerDevices[d]",
+              this.state.peerDevices[d].stream.getTracks()
+            );
             return (
               <RemotePlayer key={i} srcObj={this.state.peerDevices[d].stream} />
             );

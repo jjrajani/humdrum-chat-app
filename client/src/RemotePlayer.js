@@ -11,17 +11,20 @@ export default class RemotePlayer extends Component {
     }
   };
   render() {
+    console.log("remote", this);
     return (
-      <video
-        ref={c => {
-          if (c && this.props.srcObj) {
-            this.player = c;
-            this.player.srcObject = this.props.srcObj;
-            c.srcObject = this.props.srcObj;
-          }
-        }}
-        autoPlay={true}
-      />
+      <div className="media-wrapper">
+        <video
+          ref={c => {
+            if (c && this.props.srcObj) {
+              this.player = c;
+              this.player.srcObject = this.props.srcObj;
+              c.srcObject = this.props.srcObj;
+            }
+          }}
+          autoPlay={true}
+        />
+      </div>
     );
   }
 }
