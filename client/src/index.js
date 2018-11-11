@@ -1,12 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.scss";
-// import App from "./App";
-// import AppTwo from "./AppTwo";
-// import AppThree from "./AppThree";
-// import AppFour from "./AppFour";
-// import AppFive from "./AppFive";
-import AppSix from "./AppSix";
+import AppSix from "./App";
 // import * as serviceWorker from "./serviceWorker";
 
 function getRandomInt(max) {
