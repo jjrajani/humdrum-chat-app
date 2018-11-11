@@ -7,7 +7,7 @@ export default class AppSix extends Component {
       <div>
         <header>
           <p className="disclaimer">
-            {`This app only has one room. To start a video call, just open this app in another window. \n Let's hope no one is in there.`}
+            {`This app only has one room. To start a video call, just open this app in another window. \n Let's hope there's no one in there.`}
           </p>
           <div>
             <a
