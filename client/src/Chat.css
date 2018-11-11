@@ -1,0 +1,65 @@
+.media-wrapper {
+  border: solid red 1px;
+  width: 48%;
+}
+
+.media-wrapper:nth-child(even) {
+  margin: 2% 1.25% 0px 0.75%;
+}
+
+.media-wrapper:nth-child(odd) {
+  margin: 2% 0.75% 0px 1.25%;
+}
+
+.media-wrapper:last-child {
+  margin-bottom: 2%;
+}
+
+.media-wrapper video {
+  width: 100%;
+}
+
+.media-streams {
+  border: solid yellow 4px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 95vw;
+  margin: 5vh auto;
+}
+
+/* .App {
+  text-align: center;
+  font-family: "Courier New", monospace;
+  width: 100%;
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 42px;
+}
+
+video {
+  width: 600px;
+  height: 400px;
+}
+
+.passwords {
+  list-style: none;
+  padding: 0;
+  font-size: 32px;
+  margin-bottom: 2em;
+}
+
+.more {
+  font-size: 32px;
+  font-family: "Courier New", monospace;
+  border: 2px solid #000;
+  background-color: #fff;
+  padding: 10px 25px;
+}
+.more:hover {
+  background-color: #fdd836;
+}
+.more:active {
+  background-color: #ffefa9;
+} */
