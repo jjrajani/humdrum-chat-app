@@ -921,6 +921,95 @@ All we have now is to add the ability to leave the channel. Right now, if you cl
 
 - After saving your changes and navigating back to your browser, open two or more tabs. Join the same channel in each tab and see your group video chat working! If you close a tab or join a different channel from any of the tabs you should see a user leave the original video chat.
 
+### Step 13) Mute/Unmute Video/Audio
+
+Now let's add a mute button to make a nicer user experience.
+
+1.  Let's begin by adding a button to mute audio to our **Call** component's render method.
+
+```javascript
+  // Call.js
+  ...
+  render() {
+    return (
+      <div className="call-wrapper">
+        <div id="agora_local" />
+
+        <div className="buttons-wrapper">
+          <button onClick={this.toggleAudio}>Toggle Audio</button>
+        </div>
+
+        {Object.keys(this.state.remoteStreams).map(key => {
+          let stream = this.state.remoteStreams[key];
+          let streamId = stream.getId();
+          return <div key={streamId} id={`agora_remote ${streamId}`} />;
+        })}
+      </div>
+    );
+  }
+  ...
+```
+
+2.  And add the `toggleAudio` method.
+
+```javascript
+// Call.js
+...
+toggleAudio = () => {
+  let isPlaying = this.localStream.audioEnabled;
+  if (isPlaying) {
+    this.localStream.disableAudio();
+  } else {
+    this.localStream.enableAudio();
+  }
+};
+...
+```
+
+3.  Now we will add the mute video button.
+
+```javascript
+  // Call.js
+  ...
+  render() {
+    return (
+      <div className="call-wrapper">
+        <div id="agora_local" />
+
+        <div className="buttons-wrapper">
+          <button onClick={this.toggleAudio}>Toggle Audio</button>
+          <button onClick={this.toggleVideo}>Toggle Video</button>
+        </div>
+
+        {Object.keys(this.state.remoteStreams).map(key => {
+          let stream = this.state.remoteStreams[key];
+          let streamId = stream.getId();
+          return <div key={streamId} id={`agora_remote ${streamId}`} />;
+        })}
+      </div>
+    );
+  }
+  ...
+```
+
+4.  And the `toggleVideo` method
+
+```javascript
+  // Call.js
+  ...
+    toggleVideo = () => {
+      let isPlaying = this.localStream.videoEnabled;
+      if (isPlaying) {
+        this.localStream.disableVideo();
+      } else {
+        this.localStream.enableVideo();
+      }
+    };
+    ...
+```
+
+5.  You should now be able to mute and unmute both Video and Audio.
+
 ### Congratualtions!
 
 You have just completed building a Group Video Chat with React and the Agora.io SDK. You can find the full code sample for this demo [here](https://github.com/jjrajani/humdrum-chat-app).
