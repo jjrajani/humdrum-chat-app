@@ -85,7 +85,7 @@ export default App;
 ```
 
     * If you save the changes so far and navigate back to your browser window you should see:
-    ![channel form](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel-form.png)
+    ![channel-form](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel-form.png)
 
 ##### Step 4) Channel Form Recap
 
@@ -115,7 +115,7 @@ Now let's add a form for the user to submit a channel name to join.
 ```
 
     * Save your changes.  In the browser you should now see
-    ![channel form](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel_form_input_button.png)
+    ![channel-form](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel_form_input_button.png)
 
 2.  Now, let's add state to our component so we can keep track of what the user types into the Channel Form.
 
