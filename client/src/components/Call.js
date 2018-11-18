@@ -148,10 +148,34 @@ export default class Call extends Component {
     }
   };
 
+  toggleAudio = () => {
+    let isPlaying = this.localStream.audioEnabled;
+    if (isPlaying) {
+      this.localStream.disableAudio();
+    } else {
+      this.localStream.enableAudio();
+    }
+  };
+
+  toggleVideo = () => {
+    let isPlaying = this.localStream.videoEnabled;
+    if (isPlaying) {
+      this.localStream.disableVideo();
+    } else {
+      this.localStream.enableVideo();
+    }
+  };
+
   render() {
+    console.log("localStream", this.localStream);
+    window.localStream = this.localStream;
     return (
       <div className="call-wrapper">
         <div id="agora_local" />
+        <div className="buttons-wrapper">
+          <button onClick={this.toggleAudio}>Toggle Audio</button>
+          <button onClick={this.toggleVideo}>Toggle Video</button>
+        </div>
         {Object.keys(this.state.remoteStreams).map(key => {
           let stream = this.state.remoteStreams[key];
           let streamId = stream.getId();
