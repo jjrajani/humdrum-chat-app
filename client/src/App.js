@@ -1,34 +1,27 @@
 import React, { Component } from "react";
-import Chat from "./components/chat/Chat";
+import ChannelForm from "./components/ChannelForm";
+import Call from "./components/Call";
 
-export default class AppSix extends Component {
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      channel: ""
+    };
+  }
+
+  selectChannel = channel => {
+    this.setState({ channel });
+  };
+
   render() {
     return (
-      <div>
-        <header>
-          <p className="disclaimer">
-            {`This app only has one room. To start a video call, just open this app in another window. \n Let's hope there's no one in there.`}
-          </p>
-          <div>
-            <a
-              href="https://github.com/jjrajani"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              github
-            </a>
-            <a
-              href="https://jjrajani.github.io"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              portfolio
-            </a>
-          </div>
-        </header>
-        <Chat />
-        <footer />
+      <div className="app-wrapper">
+        <ChannelForm selectChannel={this.selectChannel} />
+        <Call channel={this.state.channel} />
       </div>
     );
   }
 }
+
+export default App;
