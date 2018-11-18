@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import AgoraRTC from "agora-rtc-sdk";
+import * as keys from "../keys";
+
 let client = AgoraRTC.createClient({ mode: "live", codec: "h264" });
 
 const USER_ID = Math.floor(Math.random() * 1000000001);
-const APP_ID = "aed1787f4f1d41a0baf205dc0193f586";
 
 export default class Call extends Component {
   localStream = AgoraRTC.createStream({
@@ -43,7 +44,7 @@ export default class Call extends Component {
 
   initClient = () => {
     client.init(
-      APP_ID,
+      keys.APP_ID,
       function() {
         console.log("AgoraRTC client initialized");
       },
