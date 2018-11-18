@@ -53,38 +53,38 @@ Now we will create the form that allows the user to join a room. For simplicity,
 
 1.  Open **ChannelForm.js** and add the following,
 
-```javascript
-// ChannelForm.js
-import React, { Component } from "react";
+    ```javascript
+    // ChannelForm.js
+    import React, { Component } from "react";
 
-export default class ChannelForm extends Component {
-  render() {
-    return <div className="form-wrapper">This will be the ChannelForm</div>;
-  }
-}
-```
+    export default class ChannelForm extends Component {
+      render() {
+        return <div className="form-wrapper">This will be the ChannelForm</div>;
+      }
+    }
+    ```
 
 2.  Now, navigate back to App.js and replace the file contents with this:
 
-```javascript
-// App.js
-import React, { Component } from "react";
-import ChannelForm from "./components/ChannelForm";
+    ```javascript
+    // App.js
+    import React, { Component } from "react";
+    import ChannelForm from "./components/ChannelForm";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="app-wrapper">
-        <ChannelForm />
-      </div>
-    );
-  }
-}
+    class App extends Component {
+      render() {
+        return (
+          <div className="app-wrapper">
+            <ChannelForm />
+          </div>
+        );
+      }
+    }
 
-export default App;
-```
+    export default App;
+    ```
 
-    * If you save the changes so far and navigate back to your browser window you should see: ![channel-form](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel-form.png)
+    - If you save the changes so far and navigate back to your browser window you should see: ![channel-form](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel-form.png)
 
 ##### Step 4) Channel Form Recap
 
@@ -98,42 +98,42 @@ Now let's add a form for the user to submit a channel name to join.
 
 1.  First, let's add the JSX for the Form. In **ChannnelForm.js** replace the `render` method with the following:
 
-```javascript
+    ```javascript
     // ChannelForm.js
     render() {
         return (
-          <div className="form-wrapper">
-            <form>
-              <label>Channel Name</label>
-              <input type="text" placeholder="Channel Name" />
-              <input type="submit" value="Join Channel" />
-            </form>
-          </div>
+            <div className="form-wrapper">
+                <form>
+                    <label>Channel Name</label>
+                    <input type="text" placeholder="Channel Name" />
+                    <input type="submit" value="Join Channel" />
+                </form>
+            </div>
         );
-      }
-```
+    }
+    ```
 
-    * Save your changes.  In the browser you should now see ![channel-form](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel_form_input_button.png)
+    - Save your changes. In the browser you should now see ![channel-form](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel_form_input_button.png)
 
 2.  Now, let's add state to our component so we can keep track of what the user types into the Channel Form.
 
-```javascript
+    ```javascript
     // ChannelForm.js
     import React, { Component } from "react";
 
     export default class ChannelForm extends Component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          channel: ""
-        };
-      }
-      ... // render method
+        constructor(props) {
+            super(props);
+            this.state = {
+                channel: ""
+            };
+        }
+        ...
     }
-```
+    ```
 
 - ###### What is React State?
-  - All classes that extend React's `Component` class are provided with React's state manager. React will keep track of any changes that occur to the state object and will trigger a re-render if a state property changes. React is selective in it's re-render and will cherry pick only parts of the DOM that are effected by the state change. To learn more visit [React State and Lifecycle](https://reactjs.org/docs/state-and-lifecycle.html).
+  All classes that extend React's `Component` class are provided with React's state manager. React will keep track of any changes that occur to the state object and will trigger a re-render if a state property changes. React is selective in it's re-render and will cherry pick only parts of the DOM that are effected by the state change. To learn more visit [React State and Lifecycle](https://reactjs.org/docs/state-and-lifecycle.html).
 
 3.  Now that we have state, we can add methods to trigger state changes that will fire based on user input. We will first add on onChange handler to attatch to our channel name input.
 
@@ -187,43 +187,47 @@ Now that we can keep track of the state of the user's typed channel name, we can
   import React, { Component } from "react";
 
   export default class ChannelForm extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        channel: ""
+      constructor(props) {
+          super(props);
+              this.state = {
+                  channel: ""
+              };
+          }
+      }
+
+      onChange = e => {
+          let { name, value } = e.target;
+          this.setState({ [name]: value });
       };
-    }
-    onChange = e => {
-      let { name, value } = e.target;
-      this.setState({ [name]: value });
-    };
-    onSubmit = e => {
-      e.preventDefault();
-      console.log("Submiting ", this.state.channel);
-      this.setState({ channel: "" });
-    };
-    render() {
-      return (
-        <div className="form-wrapper">
-          <form onSubmit={this.onSubmit}>
-            <label>Channel Name</label>
-            <input
-              type="text"
-              placeholder="Channel Name"
-              name="channel"
-              value={this.state.channel}
-            />
-            <input type="submit" value="Join Channel" />
-          </form>
-        </div>
-      );
-    }
+
+      onSubmit = e => {
+          e.preventDefault();
+          console.log("Submiting ", this.state.channel);
+          this.setState({ channel: "" });
+      };
+
+      render() {
+          return (
+              <div className="form-wrapper">
+                  <form onSubmit={this.onSubmit}>
+                      <label>Channel Name</label>
+                      <input
+                          type="text"
+                          placeholder="Channel Name"
+                          name="channel"
+                          value={this.state.channel}
+                      />
+                      <input type="submit" value="Join Channel" />
+                  </form>
+              </div>
+          );
+      }
   }
   ```
 
   - First, we added an onSubmit method to our ChannelForm component. At the moment, our onSubmit method logs the channel name to the console, then resets the channel name value to an empty string. We will come back to complete the onSubmit method after we setup our **Call** component.
   - If you save and navigate to your browser everything should appear the same. However, if you open your dev tools, type and submit a channel name, you should see the channel name logged into your console and the channel name form value cleared out.
-    [channel form submit](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel-form-submitting.png)
+    ![channel form submit](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/channel-form-submitting.png)
 
 ### Step 7) Call Component Setup
 
@@ -263,7 +267,7 @@ Now that we can keep track of the state of the user's typed channel name, we can
     ```
 
     - If you save your changes, your browser should now look like this
-      [video call component](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/video_call_component.png)
+      ![video call component](https://raw.githubusercontent.com/jjrajani/react-agora.io/master/imgs/video_call_component.png)
 
 ### Step 8) Add Agora.io SDK to the Call component
 
@@ -364,24 +368,24 @@ Now that we can keep track of the state of the user's typed channel name, we can
 2.  Now, in our `componentDidMount` function, we will call `this.initClient()`. Then we will add the `initClient` method to our Call component.
 
     ```javascript
-        ...
-        componentDidMount() {
-            this.initLocalStream();
-            this.initClient();
-        }
+    ...
+    componentDidMount() {
+        this.initLocalStream();
+        this.initClient();
+    }
 
-        initClient = () => {
-            client.init(
-              <YOUR_APP_ID>,
-              function() {
-                console.log("AgoraRTC client initialized");
-              },
-              function(err) {
-                console.log("AgoraRTC client init failed", err);
-              }
-            );
-          };
-        ...
+    initClient = () => {
+        client.init(
+        <YOUR_APP_ID>,
+        function() {
+            console.log("AgoraRTC client initialized");
+        },
+        function(err) {
+            console.log("AgoraRTC client init failed", err);
+        }
+        );
+    };
+    ...
     ```
 
     - Save your changes and navigate back to your browser. In the console you should now see output indicating you have successfully initialized the AgoraRTC client.
@@ -395,13 +399,13 @@ Now that we can keep track of the state of the user's typed channel name, we can
       ```javascript
       // App.js
       class App extends Component {
-        constructor(props) {
-          super(props);
-          this.state = {
-            channel: ''
+          constructor(props) {
+              super(props);
+              this.state = {
+                  channel: ''
+              }
           }
-        }
-        ...
+          ...
       }
       ```
     - Add the channel state update method.
@@ -413,31 +417,31 @@ Now that we can keep track of the state of the user's typed channel name, we can
       ```
     - Pass the selectChannel as a prop to the ChannelForm.
 
-    ```javacsript
-        /// App.js
-        ...
-        render() {
-            return (
+      ```javascript
+      // App.js
+      ...
+      render() {
+          return (
               <div className="app-wraper">
-                <ChannelForm selectChannel={this.selectChannel}/>
-                <Call />
+                  <ChannelForm selectChannel={this.selectChannel}/>
+                  <Call />
               </div>
-            );
-        }
-        ...
-    ```
+          );
+      }
+      ...
+      ```
 
     - And finally, we will pass the state of our channel to our **Call** component.
       ```javascript
       // App.js
       render() {
           return (
-            <div className="app-wrapper">
-              <ChannelForm selectChannel={this.selectChannel}/>
-              <Call channel={this.state.channel}/>
-            </div>
+              <div className="app-wrapper">
+                  <ChannelForm selectChannel={this.selectChannel}/>
+                  <Call channel={this.state.channel}/>
+              </div>
           );
-        }
+      }
       ```
     - You **App.js** file should now look like this
 
@@ -488,37 +492,37 @@ Now that we can keep track of the state of the user's typed channel name, we can
 
     - Next, we want to alert our **Call** component when the selected Channel updates so we can join the new channel. To do this we will use a React lifecycle method `componentDidUpdate`. `componentDidUpdate` get's fired everytime a React component state or prop changes. In this case, the prop 'channel' will be the trigger for our `componentDidUpdate`. You can learn more about React's `componentDidUpdate` lifecycle method [here](https://reactjs.org/docs/react-component.html#componentdidupdate).
 
-      ```
+      ```javascript
       // Call.js
       ...
       componentDidUpdate(prevProps, prevState) {
           if (prevProps.channel !== this.props.channel && this.props.channel !== '') {
-            this.joinChannel();
+              this.joinChannel();
           }
-        }
-        ...
-        joinChannel = () => {
+      }
+      ...
+      joinChannel = () => {
           let me = this;
           client.join(
-            null,
-            me.props.channel,
-            USER_ID,
-            function(uid) {
-              console.log("User " + uid + " join channel successfully");
-              client.publish(me.localStream, function(err) {
-                console.log("Publish local stream error: " + err);
-              });
+              null,
+              me.props.channel,
+              USER_ID,
+              function(uid) {
+                  console.log("User " + uid + " join channel successfully");
+                  client.publish(me.localStream, function(err) {
+                      console.log("Publish local stream error: " + err);
+                  });
 
-              client.on("stream-published", function(evt) {
-                console.log("Publish local stream successfully");
-              });
-            },
-            function(err) {
-              console.log("Join channel failed", err);
-            }
+                  client.on("stream-published", function(evt) {
+                      console.log("Publish local stream successfully");
+                  });
+              },
+              function(err) {
+                  console.log("Join channel failed", err);
+              }
           );
-        };
-        ...
+      };
+      ...
       ```
 
     - The complete **Call.js** file should now look like this
@@ -531,78 +535,78 @@ Now that we can keep track of the state of the user's typed channel name, we can
       const USER_ID = Math.floor(Math.random() * 1000000001);
 
       export default class Call extends Component {
-        localStream = AgoraRTC.createStream({
-          streamID: USER_ID,
-          audio: true,
-          video: true,
-          screen: false
-        });
+          localStream = AgoraRTC.createStream({
+              streamID: USER_ID,
+              audio: true,
+              video: true,
+              screen: false
+          });
 
-        componentDidMount() {
-          this.initLocalStream();
-          this.initClient();
-        }
-
-        componentDidUpdate(prevProps, prevState) {
-          if (prevProps.channel !== this.props.channel && this.props.channel !== "") {
-            this.joinChannel();
+          componentDidMount() {
+              this.initLocalStream();
+              this.initClient();
           }
-        }
 
-        initLocalStream = () => {
-          let me = this;
-          me.localStream.init(
-            function() {
-              console.log("getUserMedia successfully");
-              me.localStream.play("agora_local");
-            },
-            function(err) {
-              console.log("getUserMedia failed", err);
-            }
-          );
-        };
+          componentDidUpdate(prevProps, prevState) {
+              if (prevProps.channel !== this.props.channel && this.props.channel !== "") {
+                  this.joinChannel();
+              }
+          }
 
-        initClient = () => {
-          client.init(
-            <YOUR_APP_ID>,
-            function() {
-              console.log("AgoraRTC client initialized");
-            },
-            function(err) {
-              console.log("AgoraRTC client init failed", err);
-            }
-          );
-        };
+          initLocalStream = () => {
+              let me = this;
+              me.localStream.init(
+                  function() {
+                      console.log("getUserMedia successfully");
+                      me.localStream.play("agora_local");
+                  },
+                  function(err) {
+                      console.log("getUserMedia failed", err);
+                  }
+              );
+          };
 
-        joinChannel = () => {
-          let me = this;
-          client.join(
-            null,
-            me.props.channel,
-            USER_ID,
-            function(uid) {
-              console.log("User " + uid + " join channel successfully");
-              client.publish(me.localStream, function(err) {
-                console.log("Publish local stream error: " + err);
-              });
+          initClient = () => {
+              client.init(
+                  <YOUR_APP_ID>,
+                  function() {
+                      console.log("AgoraRTC client initialized");
+                  },
+                  function(err) {
+                      console.log("AgoraRTC client init failed", err);
+                  }
+              );
+          };
 
-              client.on("stream-published", function(evt) {
-                console.log("Publish local stream successfully");
-              });
-            },
-            function(err) {
-              console.log("Join channel failed", err);
-            }
-          );
-        };
+          joinChannel = () => {
+              let me = this;
+              client.join(
+                  null,
+                  me.props.channel,
+                  USER_ID,
+                  function(uid) {
+                      console.log("User " + uid + " join channel successfully");
+                      client.publish(me.localStream, function(err) {
+                          console.log("Publish local stream error: " + err);
+                      });
 
-        render() {
-          return (
-            <div className="call-wrapper">
-              <div id="agora_local" style={{ width: "400px", height: "400px" }} />
-            </div>
-          );
-        }
+                      client.on("stream-published", function(evt) {
+                          console.log("Publish local stream successfully");
+                      });
+                  },
+                  function(err) {
+                      console.log("Join channel failed", err);
+                  }
+              );
+          };
+
+          render() {
+              return (
+                  <div className="call-wrapper">
+                      <div id="agora_local" style={{ width: "400px", height: "400px" }} />
+                  </div>
+              );
+          }
       }
       ```
 
@@ -614,24 +618,24 @@ Now that we can keep track of the state of the user's typed channel name, we can
 
     - Working in **Call.js** we will first add a line to the end of our `initClient` method to call `this.subscribeClient`
 
-    ```javascript
-    // Call.js
-    ...
-    initClient = () => {
-        client.init(
-          APP_ID,
-          function() {
-            console.log("AgoraRTC client initialized");
-          },
-          function(err) {
-            console.log("AgoraRTC client init failed", err);
-          }
-        );
-        // Add this
-        this.subscribeToClient();
+      ```javascript
+      // Call.js
+      ...
+      initClient = () => {
+          client.init(
+              APP_ID,
+              function() {
+                  console.log("AgoraRTC client initialized");
+              },
+              function(err) {
+                  console.log("AgoraRTC client init failed", err);
+              }
+          );
+          // Add this
+          this.subscribeToClient();
       };
       ...
-    ```
+      ```
 
     - Then we will add the new `subscribeToClient` method to our **Call** component.
 
@@ -646,8 +650,8 @@ Now that we can keep track of the state of the user's typed channel name, we can
           client.on("stream-removed", me.onStreamRemoved);
 
           client.on("peer-leave", me.onPeerLeave);
-        };
-        ...
+      };
+      ...
       ```
 
       - Note, the callback functions have not yet been created. We will do that now.
@@ -655,32 +659,32 @@ Now that we can keep track of the state of the user's typed channel name, we can
 2.  Let's start with the `stream-added` event. When the `stream-added` event is fired, it is an indication that a new user has added their stream to our channel. We will want to track all users in our stream in our **Call** component's state. Let's add a state holder for remoteStreams and the onStreamAdded method.
 
     ```javascript
-        ...
-        state = {
-            remoteStreams: {}
-        }
-        ...
-        onStreamAdded = evt => {
-            let me = this;
-            let stream = evt.stream;
-            console.log("New stream added: " + stream.getId());
-            me.setState(
-              {
+    ...
+    state = {
+        remoteStreams: {}
+    }
+    ...
+    onStreamAdded = evt => {
+        let me = this;
+        let stream = evt.stream;
+        console.log("New stream added: " + stream.getId());
+        me.setState(
+            {
                 remoteStreams: {
-                  ...me.state.remoteStream,
-                  [stream.getId()]: stream
+                    ...me.state.remoteStream,
+                    [stream.getId()]: stream
                 }
-              },
-              () => {
+            },
+            () => {
                 // Subscribe after new remoteStreams state set to make sure
                 // new stream dom el has been rendered for agora.io sdk to pick up
                 client.subscribe(stream, function(err) {
-                  console.log("Subscribe stream failed", err);
+                    console.log("Subscribe stream failed", err);
                 });
-              }
-            );
-          };
-      ...
+            }
+        );
+    };
+    ...
     ```
 
     - In our new `onStreamAdded` method we have done two things. First, we add a new remoteStream to our remoteStreams state. The new remoteStream will be stored on an object with a key of the remoteStreams id. This will make it easy for us to find it later. Second, we pass a callback function to React's `setState` method. This callback function will be called immediately after React completes it's state updates. In the callback function we will subscribe to the remoteSteam we just added to our **Call** component's state. We want to make sure we do not subscribe to the remoteStream until after the stream is registered in our **Call** component's state. If we subscribe too early, our re-render will not have completed before the Agora Client searches for the remove video's corresponding div, and our render will fail.
@@ -688,30 +692,31 @@ Now that we can keep track of the state of the user's typed channel name, we can
     - Save your changes and navigate back to your browser window. You should now be able to open the app in two tabs, join the same channel from both tabs, and observe the console output. If everything is right to this point, you should see something like "Remote stream subscribed with uid"
 
 3.  Next, we will the state object `remoteStreams` to determine how many peer video's to render onto the page and to sync them to the appropriate remote stream. Let's update the **Call** component's render method.
-    ```javascript
+
+```javascript
     // Call.js
-    ...
     render() {
         return (
-          <div className="app-wrapper">
-            <div id="agora_local" style={{ width: "400px", height: "400px" }} />
-            {Object.keys(this.state.remoteStreams).map(key => {
-              let stream = this.state.remoteStreams[key];
-              let streamId = stream.getId();
-              return (
-                <div
-                  key={streamId}
-                  id={`agora_remote ${streamId}`}
-                  style={{ width: "400px", height: "400px" }}
-                />
-              );
-            })}
-          </div>
+            <div className="app-wrapper">
+                <div id="agora_local" style={{ width: "400px", height: "400px" }} />
+                {Object.keys(this.state.remoteStreams).map(key => {
+                    let stream = this.state.remoteStreams[key];
+                    let streamId = stream.getId();
+                    return (
+                        <div
+                            key={streamId}
+                            id={`agora_remote ${streamId}`}
+                            style={{ width: "400px", height: "400px" }}
+                        />
+                    );
+                })}
+            </div>
         );
-      }
-    ...
-    ```
-    - At this point, after saving your changes, you can visit the app from two tabs and join the same channel from each. If you inspect the DOM you will see there is now an extra video element for a remote user, it just isn't playing yet. We'll do that next.
+    }
+```
+
+- At this point, after saving your changes, you can visit the app from two tabs and join the same channel from each. If you inspect the DOM you will see there is now an extra video element for a remote user, it just isn't playing yet. We'll do that next.
+
 4.  Now that we have remote user's videos rendering, we can complete the `onRemoteClientAdded` method and make our remote user's videos play.
     ```javascript
     onRemoteClientAdded = evt => {
@@ -733,133 +738,133 @@ Now that we can keep track of the state of the user's typed channel name, we can
     const USER_ID = Math.floor(Math.random() * 1000000001);
 
     export default class Call extends Component {
-      localStream = AgoraRTC.createStream({
-        streamID: USER_ID,
-        audio: true,
-        video: true,
-        screen: false
-      });
+        localStream = AgoraRTC.createStream({
+            streamID: USER_ID,
+            audio: true,
+            video: true,
+            screen: false
+        });
 
-      state = {
-        remoteStreams: []
-      };
+        state = {
+            remoteStreams: []
+        };
 
-      componentDidMount() {
-        this.initLocalStream();
-        this.initClient();
-      }
-
-      componentDidUpdate(prevProps, prevState) {
-        if (prevProps.channel !== this.props.channel && this.props.channel !== "") {
-          this.joinChannel();
+        componentDidMount() {
+            this.initLocalStream();
+            this.initClient();
         }
-      }
 
-      initLocalStream = () => {
-        let me = this;
-        me.localStream.init(
-          function() {
-            console.log("getUserMedia successfully");
-            me.localStream.play("agora_local");
-          },
-          function(err) {
-            console.log("getUserMedia failed", err);
-          }
-        );
-      };
-
-      initClient = () => {
-        client.init(
-          <YOUR_APP_ID>,
-          function() {
-            console.log("AgoraRTC client initialized");
-          },
-          function(err) {
-            console.log("AgoraRTC client init failed", err);
-          }
-        );
-        this.subscribeToClient();
-      };
-
-      subscribeToClient = () => {
-        let me = this;
-        client.on("stream-added", me.onStreamAdded);
-        client.on("stream-subscribed", me.onRemoteClientAdded);
-
-        client.on("stream-removed", me.onStreamRemoved);
-
-        client.on("peer-leave", me.onPeerLeave);
-      };
-
-      onStreamAdded = evt => {
-        let me = this;
-        let stream = evt.stream;
-        console.log("New stream added: " + stream.getId());
-        me.setState(
-          {
-            remoteStreams: {
-              ...me.state.remoteStream,
-              [stream.getId()]: stream
+        componentDidUpdate(prevProps, prevState) {
+            if (prevProps.channel !== this.props.channel && this.props.channel !== "") {
+                this.joinChannel();
             }
-          },
-          () => {
-            // Subscribe after new remoteStreams state set to make sure
-            // new stream dom el has been rendered for agora.io sdk to pick up
-            client.subscribe(stream, function(err) {
-              console.log("Subscribe stream failed", err);
-            });
-          }
-        );
-      };
+        }
 
-      joinChannel = () => {
-        let me = this;
-        client.join(
-          null,
-          me.props.channel,
-          USER_ID,
-          function(uid) {
-            console.log("User " + uid + " join channel successfully");
-            client.publish(me.localStream, function(err) {
-              console.log("Publish local stream error: " + err);
-            });
+        initLocalStream = () => {
+            let me = this;
+            me.localStream.init(
+                function() {
+                    console.log("getUserMedia successfully");
+                    me.localStream.play("agora_local");
+                },
+                function(err) {
+                    console.log("getUserMedia failed", err);
+                }
+            );
+        };
 
-            client.on("stream-published", function(evt) {
-              console.log("Publish local stream successfully");
-            });
-          },
-          function(err) {
-            console.log("Join channel failed", err);
-          }
-        );
-      };
+        initClient = () => {
+            client.init(
+                <YOUR_APP_ID>,
+                function() {
+                    console.log("AgoraRTC client initialized");
+                },
+                function(err) {
+                    console.log("AgoraRTC client init failed", err);
+                }
+            );
+            this.subscribeToClient();
+        };
 
-      onRemoteClientAdded = evt => {
-        let me = this;
-        let remoteStream = evt.stream;
-        me.state.remoteStreams[remoteStream.getId()].play(
-          "agora_remote " + remoteStream.getId()
-        );
-      };
+        subscribeToClient = () => {
+            let me = this;
+            client.on("stream-added", me.onStreamAdded);
+            client.on("stream-subscribed", me.onRemoteClientAdded);
 
-      render() {
-        return (
-          <div className="call-wrapper">
-            <div id="agora_local" style={{ width: "400px", height: "400px" }} />
-            {Object.keys(this.state.remoteStreams).map(key => {
-              let stream = this.state.remoteStreams[key];
-              let streamId = stream.getId();
-              return (
-                <div
-                  key={streamId}
-                  id={`agora_remote ${streamId}`}
-                  style={{ width: "400px", height: "400px" }}
-                />
-              );
-            })}
-          </div>
-        );
-      }
+            client.on("stream-removed", me.onStreamRemoved);
+
+            client.on("peer-leave", me.onPeerLeave);
+        };
+
+        onStreamAdded = evt => {
+            let me = this;
+            let stream = evt.stream;
+            console.log("New stream added: " + stream.getId());
+            me.setState(
+                {
+                    remoteStreams: {
+                        ...me.state.remoteStream,
+                        [stream.getId()]: stream
+                    }
+                },
+                () => {
+                    // Subscribe after new remoteStreams state set to make sure
+                    // new stream dom el has been rendered for agora.io sdk to pick up
+                    client.subscribe(stream, function(err) {
+                        console.log("Subscribe stream failed", err);
+                    });
+                }
+            );
+        };
+
+        joinChannel = () => {
+            let me = this;
+            client.join(
+                null,
+                me.props.channel,
+                USER_ID,
+                function(uid) {
+                    console.log("User " + uid + " join channel successfully");
+                    client.publish(me.localStream, function(err) {
+                        console.log("Publish local stream error: " + err);
+                    });
+
+                    client.on("stream-published", function(evt) {
+                        console.log("Publish local stream successfully");
+                    });
+                },
+                function(err) {
+                    console.log("Join channel failed", err);
+                }
+            );
+        };
+
+        onRemoteClientAdded = evt => {
+            let me = this;
+            let remoteStream = evt.stream;
+            me.state.remoteStreams[remoteStream.getId()].play(
+                "agora_remote " + remoteStream.getId()
+            );
+        };
+
+        render() {
+            return (
+                <div className="call-wrapper">
+                    <div id="agora_local" style={{ width: "400px", height: "400px" }} />
+                    {Object.keys(this.state.remoteStreams).map(key => {
+                        let stream = this.state.remoteStreams[key];
+                        let streamId = stream.getId();
+                        return (
+                            <div
+                                key={streamId}
+                                id={`agora_remote ${streamId}`}
+                                style={{ width: "400px", height: "400px" }}
+                            />
+                        );
+                    })}
+                </div>
+            );
+        }
     }
     ```
 
@@ -871,13 +876,13 @@ All we have now is to add the ability to leave the channel. Right now, if you cl
 
     - Add the `onStreamRemoved` method
 
-    ```javascript
-    // Call.js
-    ...
-    onStreamRemoved = evt => {
-        let me = this;
-        let stream = evt.stream;
-        if (stream) {
+      ```javascript
+      // Call.js
+      ...
+      onStreamRemoved = evt => {
+          let me = this;
+          let stream = evt.stream;
+          if (stream) {
           let streamId = stream.getId();
           let { remoteStreams } = me.state;
 
@@ -887,20 +892,20 @@ All we have now is to add the ability to leave the channel. Right now, if you cl
           me.setState({ remoteStreams });
 
           console.log("Remote stream is removed " + stream.getId());
-        }
+          }
       };
       ...
-    ```
+      ```
 
     - Add the `onPeerLeave` method
 
-    ```javascript
-    // Call.js
-    ...
-    onPeerLeave = evt => {
-        let me = this;
-        let stream = evt.stream;
-        if (stream) {
+      ```javascript
+      // Call.js
+      ...
+      onPeerLeave = evt => {
+          let me = this;
+          let stream = evt.stream;
+          if (stream) {
           let streamId = stream.getId();
           let { remoteStreams } = me.state;
 
@@ -910,12 +915,12 @@ All we have now is to add the ability to leave the channel. Right now, if you cl
           me.setState({ remoteStreams });
 
           console.log("Remote stream is removed " + stream.getId());
-        }
+          }
       };
       ...
-    ```
+      ```
 
-         * You'll notice these methods are identical.  For explicitness we will leave both methods but if you would like to refactor and use only one feel free.
+      - You'll notice these methods are identical. For explicitness we will leave both methods but if you would like to refactor and use only one feel free.
 
 - After saving your changes and navigating back to your browser, open two or more tabs. Join the same channel in each tab and see your group video chat working! If you close a tab or join a different channel from any of the tabs you should see a user leave the original video chat.
 
@@ -925,86 +930,86 @@ Now let's add a mute button to make a nicer user experience.
 
 1.  Let's begin by adding a button to mute audio to our **Call** component's render method.
 
-```javascript
-  // Call.js
-  ...
-  render() {
-    return (
-      <div className="call-wrapper">
-        <div id="agora_local" />
+    ```javascript
+    // Call.js
+    ...
+    render() {
+        return (
+            <div className="call-wrapper">
+                <div id="agora_local" />
 
-        <div className="buttons-wrapper">
-          <button onClick={this.toggleAudio}>Toggle Audio</button>
-        </div>
+                <div className="buttons-wrapper">
+                    <button onClick={this.toggleAudio}>Toggle Audio</button>
+                </div>
 
-        {Object.keys(this.state.remoteStreams).map(key => {
-          let stream = this.state.remoteStreams[key];
-          let streamId = stream.getId();
-          return <div key={streamId} id={`agora_remote ${streamId}`} />;
-        })}
-      </div>
-    );
-  }
-  ...
-```
+                {Object.keys(this.state.remoteStreams).map(key => {
+                    let stream = this.state.remoteStreams[key];
+                    let streamId = stream.getId();
+                    return <div key={streamId} id={`agora_remote ${streamId}`} />;
+                })}
+            </div>
+        );
+    }
+    ...
+    ```
 
 2.  And add the `toggleAudio` method.
 
-```javascript
-// Call.js
-...
-toggleAudio = () => {
-  let isPlaying = this.localStream.audioEnabled;
-  if (isPlaying) {
-    this.localStream.disableAudio();
-  } else {
-    this.localStream.enableAudio();
-  }
-};
-...
-```
+    ```javascript
+    // Call.js
+    ...
+    toggleAudio = () => {
+        let isPlaying = this.localStream.audioEnabled;
+        if (isPlaying) {
+            this.localStream.disableAudio();
+        } else {
+            this.localStream.enableAudio();
+        }
+    };
+    ...
+    ```
 
 3.  Now we will add the mute video button.
 
-```javascript
-  // Call.js
-  ...
-  render() {
-    return (
-      <div className="call-wrapper">
-        <div id="agora_local" />
+    ```javascript
+    // Call.js
+    ...
+    render() {
+        return (
+        <div className="call-wrapper">
+            <div id="agora_local" />
 
-        <div className="buttons-wrapper">
-          <button onClick={this.toggleAudio}>Toggle Audio</button>
-          <button onClick={this.toggleVideo}>Toggle Video</button>
+            <div className="buttons-wrapper">
+                <button onClick={this.toggleAudio}>Toggle Audio</button>
+                <button onClick={this.toggleVideo}>Toggle Video</button>
+            </div>
+
+            {Object.keys(this.state.remoteStreams).map(key => {
+                let stream = this.state.remoteStreams[key];
+                let streamId = stream.getId();
+                return <div key={streamId} id={`agora_remote ${streamId}`} />;
+            })}
         </div>
-
-        {Object.keys(this.state.remoteStreams).map(key => {
-          let stream = this.state.remoteStreams[key];
-          let streamId = stream.getId();
-          return <div key={streamId} id={`agora_remote ${streamId}`} />;
-        })}
-      </div>
-    );
-  }
-  ...
-```
+        );
+    }
+    ...
+    ```
 
 4.  And the `toggleVideo` method
 
-```javascript
-  // Call.js
-  ...
+    ```javascript
+    // Call.js
+    ...
     toggleVideo = () => {
-      let isPlaying = this.localStream.videoEnabled;
-      if (isPlaying) {
-        this.localStream.disableVideo();
-      } else {
-        this.localStream.enableVideo();
-      }
+        let isPlaying = this.localStream.videoEnabled;
+        if (isPlaying) {
+            this.localStream.disableVideo();
+        } else {
+            this.localStream.enableVideo();
+        }
     };
     ...
-```
+    ```
 
 5.  You should now be able to mute and unmute both Video and Audio.
 
