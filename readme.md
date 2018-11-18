@@ -2,7 +2,7 @@
 
 In this guide we will build a video chat using [React](https://reactjs.org/docs/getting-started.html) and [Agora.io](https://docs.agora.io/en). This guide will assume you have little to no experience using React but understand the basics of webRTC and/or have used the [Agora.io SDK](https://docs.agora.io/en/Agora%20Platform/downloads).
 
-[Demo](http://react-agora.surge.sh/)
+[Demo](https://humdrum-chat-app.herokuapp.com/)
 
 ### Overview
 
@@ -923,4 +923,4 @@ All we have now is to add the ability to leave the channel. Right now, if you cl
 
 ### Congratualtions!
 
-You have just completed building a Group Video Chat with React and the Agora.io SDK. You can find the full code sample for this demo [here](https://github.com/jjrajani/react-agora.io).
+You have just completed building a Group Video Chat with React and the Agora.io SDK. You can find the full code sample for this demo [here](https://github.com/jjrajani/humdrum-chat-app).
